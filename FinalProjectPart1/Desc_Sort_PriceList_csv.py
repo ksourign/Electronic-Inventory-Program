@@ -1,4 +1,5 @@
 #Takes "PriceList.csv" (item_id, price) and creates a list that sorts price greatest to least with corresponding ID [[item_id, price]]
+#Ex: pricesorted [['item_id','price'], ['item2_id', 'item2_price']]
 
 import csv
 pricesorted = []
@@ -34,9 +35,11 @@ with open ("PriceList.csv", 'r') as csv_price:
 for i in pricesorted:
     for j in PriceList_array:
         if i[0] == j[1]:
-            i.append(j[0])
+            i.insert(0, (j[0])) # inserts corresponding item_id, j[0], to the start, (0), of the pricesorted to match original csv
 
-# ex: pricesorted array [[3001265,'1200'], [2347800,'999'], [2390112, '799'], [1009453, '599'], [1167234, '534'], [9034210,'345'], [7346234,'239']]
-print(pricesorted)
+# ex: pricesorted array [['3001265','1200'], ['2347800','999'], ['2390112', '799'], ['1009453', '599'], ['1167234', '534'], ['9034210','345'], ['7346234','239']]
+
+if __name__ == "__main__": #only run this code if executing this file directly
+    print(pricesorted)
 
 
