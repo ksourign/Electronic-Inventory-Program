@@ -1,6 +1,6 @@
 import csv
 from datetime import datetime, date
-from Asc_Date_Sort_ServiceDatesList_csv import datesorted 
+from Asc_Date_Sort_ServiceDatesList_csv import service_date_sorted 
 from Desc_Sort_PriceList_csv import pricesorted 
 
 
@@ -30,7 +30,7 @@ with open ("ManufacturerList.csv", 'r') as csv_manufacturerlist: #file_object
 # Corresponding item price with manufacturerlist using imported 'sortedprice' array
 for i in manufacturerList_sorted:
     for j in pricesorted:
-        for k in datesorted:
+        for k in service_date_sorted:
             if i[0] == j[0] and i[0] == k[0]: #if item_id matches in manufacturerList_sorted & in pricesorted
                 i.insert (3, j[1]) #insert item price date into pos 3 manufactureList_sorted
                 i.insert(4, k[1]) #insert item date into pos 2 manufactureList_sorted
@@ -40,10 +40,12 @@ for i in manufacturerList_sorted:
 # print('full inventory list', full_inventory_list)
 
 def writing_full_inventory_csv():
-    with open('FullInventory.csv', 'w', newline='') as full_inventory_csv:
-        write_full_inventory_csv = csv.writer(full_inventory_csv)
+    with open('FullInventory.csv', 'w', newline='') as full_inventory_csv: #file obj, returns csv file
+        write_full_inventory_csv = csv.writer(full_inventory_csv) #csv writer object
         write_full_inventory_csv.writerows(full_inventory_list)
     print("FullInventory.csv written successfully!")
+
+
 
 
 def writing_item_type_csv():
@@ -64,13 +66,32 @@ def writing_item_type_csv():
                 write_csv_item_type.writerows(x_item_type_list) #appending item record in full_inventory[] for item_type, i[2] ; j[0:2]+j[3:] is here to remove item_type. 2347800,Apple + 999,7/3/2020
                 print(f'{i[2].capitalize()}Inventory.csv written successfully!')
                 
-                
+
+
+def writing_past_service_date_csv():
+    past_service_date_list = []
+    with open('PastServiceDateInventory.csv', 'w', newline='') as past_service_date_csv: #creating PastServiceDateInventory csv file
+        write_csv_past_service_date = csv.writer(past_service_date_csv) #writing from past_service_date_csv
+        for i in service_date_sorted:
+            if datetime.strptime(i[1], "%m/%d/%Y").date() < date.today():
+                for j in full_inventory_list:
+                    if j[0] == i[0]: #comparing item_id from service_date_sorted[] and full_inventory_list []
+                        past_service_date_list.append(j) #appending item record from full_inventory_list [] where today's date is item's service date
+                        
+        write_csv_past_service_date.writerows(past_service_date_list)
+    print("FullInventory.csv written successfully!")
+        
+
+
 if __name__ == "__main__":
     print('Full Inventory List:')
     writing_full_inventory_csv()
+    
     print()
     print('Item Type Inventory List:')
     writing_item_type_csv()
+    
+    print()
+    print('Past Service Date List:')
+    writing_past_service_date_csv()
 
-# print('pricesorted', pricesorted)
-# print('datesorted',datesorted)
