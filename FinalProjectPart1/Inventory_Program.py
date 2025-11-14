@@ -46,8 +46,31 @@ def writing_full_inventory_csv():
     print("FullInventory.csv written successfully!")
 
 
+def writing_item_type_csv():
+    diff_item_type = [] #storing diff item_type
+    for i in full_inventory_list: #looping thru items in inventory to target i[2], which is the item_type (ex: laptop, phone)
+        x_item_type_list = []
+        if(i[2] not in diff_item_type): #if item_type not in item_type[], then loop thru full_inventory for that diff item_type
+            diff_item_type.append(i[2]) #append new item_type ['phone','laptop'...]
+            with open(f'{i[2].capitalize()}Inventory.csv', 'w', newline='') as item_type_csv: #creating {Item_type}Inventory.csv file (ex: "LaptopInventory.csv")
+                write_csv_item_type = csv.writer(item_type_csv)
+                for j in full_inventory_list: #for appending item records related to the item_type chosen, i[2]. Loop item_type, i[2], in full_inventory_list until it's done
+                    if i[2] == j[2]: #if the item_type, i[2], == j[2] then write down tht item_type record, (j), into {item_type}Inventory.csv
+                        
+                        x_item_type_list.append(j[0:2]+j[3:])                        
+
+                x_item_type_list.sort(key=lambda x: x[0]) #sorting each item record by item_id
+
+                write_csv_item_type.writerows(x_item_type_list) #appending item record in full_inventory[] for item_type, i[2] ; j[0:2]+j[3:] is here to remove item_type. 2347800,Apple + 999,7/3/2020
+                print(f'{i[2].capitalize()}Inventory.csv written successfully!')
+                
+                
 if __name__ == "__main__":
+    print('Full Inventory List:')
     writing_full_inventory_csv()
+    print()
+    print('Item Type Inventory List:')
+    writing_item_type_csv()
 
 # print('pricesorted', pricesorted)
 # print('datesorted',datesorted)
