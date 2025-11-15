@@ -1,6 +1,5 @@
 #Takes "PriceList.csv" (item_id, price) and creates a list that sorts price greatest to least with corresponding ID [[item_id, price]]
 #Ex: pricesorted [['item_id','price'], ['item2_id', 'item2_price']]
-import os
 
 import csv
 pricesorted = []
