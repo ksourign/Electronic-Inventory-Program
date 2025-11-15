@@ -8,7 +8,7 @@ service_date_sorted = [] #final ServiceDatesList sorted (dates sorted asc w/ cor
 PastServiceDate_array = []
 
 
-with open ("ServiceDatesList.csv", 'r') as csv_servicedates:
+with open ("csv_inputs/ServiceDatesList.csv", 'r') as csv_servicedates:
     PastServiceDate_csv = csv.reader (csv_servicedates)
     next(PastServiceDate_csv) #skips header row in csv file "item_id, service_date"
     for i in PastServiceDate_csv:

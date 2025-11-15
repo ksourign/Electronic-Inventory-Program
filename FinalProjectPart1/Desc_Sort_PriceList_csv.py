@@ -1,11 +1,12 @@
 #Takes "PriceList.csv" (item_id, price) and creates a list that sorts price greatest to least with corresponding ID [[item_id, price]]
 #Ex: pricesorted [['item_id','price'], ['item2_id', 'item2_price']]
+import os
 
 import csv
 pricesorted = []
 PriceList_array = []
 
-with open ("PriceList.csv", 'r') as csv_price:
+with open (r"csv_inputs/PriceList.csv", 'r') as csv_price:
     PriceList_csv= csv.reader(csv_price)  #creates csv reader object - ex: <_csv.reader object at 0x00000214E82C6BC0>
     next(PriceList_csv) #skips header row in csv file "item_id, price"
     for i in PriceList_csv:
@@ -41,5 +42,7 @@ for i in pricesorted:
 
 if __name__ == "__main__": #only run this code if executing this file directly
     print(pricesorted)
+    
+
 
 
