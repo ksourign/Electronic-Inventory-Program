@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime, date
 from Asc_Date_Sort_ServiceDatesList_csv import service_date_sorted 
-from full_inventory_manu_asc import full_inventory_list
+from Full_Inventory_Manu_asc import full_inventory_list
 
 #writing FullInventory.csv - writing all items in inventory ex: [item_id,manufacturer,item_type,price,service_date,if_damaged]
 def writing_full_inventory_csv():
