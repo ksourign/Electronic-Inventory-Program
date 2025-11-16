@@ -85,6 +85,7 @@ def clean_user_input(user_input):
     # Ensures that user input is length of 2 [[x,y]]
     if len(user_input[0]) != 2:
         print ('Wrong Format Inputted. Please Try Again [ex: "apple phone"]', user_input)
+        return False
 
 
     
@@ -102,7 +103,9 @@ def clean_user_input(user_input):
         return (user_input)
     
     else: #if it's not in manufacturer_list or item_type_list, then that means it's not in inventory
-        print (f"No such item in inventory {user_input}")
+        print(f"No such item in inventory {user_input}")
+        return False
+        
         
         
         
@@ -112,16 +115,11 @@ def check_inventory(user_input):
 
     print("\nYour Item is:")
 
-    for i in user_input:
-        for j in full_inventory_list: #[[],[],[]]
-            if i[0] == j[1].lower and i[1] == j[2]: #if user's manufacturer,j[0], is equal to i[1](manufacturer position) AND i[2](item_type)
-                print(j[0], j[1], j[2], j[3]) #print the item_id, manufacturer, item_type, price
-
-
     
-    # print('manufacturer_list', manufacturer_list)
-
-
+    for i in full_inventory_list: #[[],[],[]]
+        if user_input[0][0] == i[1].lower() and user_input[0][1] == i[2]: #if user's manufacturer,j[0], is equal to i[1](manufacturer position) AND i[2](item_type)
+            print(i[0], i[1], i[2], i[3]) #print the item_id, manufacturer, item_type, price
+    
     
 
         
@@ -130,29 +128,16 @@ if __name__ == "__main__":
 
     # Part 1 (Creating CSV Outputs)
     writing_full_inventory_csv()
-    
-    
     writing_item_type_csv()
-    
-    
     writing_past_service_date_csv()
-    
-    
     writing_damaged_inventory_csv()
 
 
 
 
-
-
-    #Part 2 (Interactive Inventory Query)
+    # Part 2 (Interactive Inventory Query Capability)
+    
     print('\nEnter "q" to Quit')
-    
-    
-    
-    
-    #Code for User Inputs
-
     # userinput = input("Enter manufacturer and item type [ex: 'apple phone']: ") #ex: userinput = 'apple phone'
     userinput = ""
     while userinput != 'q':
@@ -160,8 +145,10 @@ if __name__ == "__main__":
 
         if userinput != 'q':
             # print(userinput) 
-            clean_user_input(userinput)
-            check_inventory (clean_user_input(userinput))
+            if clean_user_input(userinput) != False:
+                check_inventory (clean_user_input(userinput))
+            
+
 
 
 
