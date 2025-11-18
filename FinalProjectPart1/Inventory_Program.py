@@ -52,7 +52,8 @@ def writing_past_service_date_csv():
 
 #writing DamagedInventory.csv - writing all damaged items, sorted most to least expensive, ex: DamagedInventory.csv [item_id,manufacturer,item_type,price,service_date]
     print('\nDamaged Inventory List:')
-def writing_damaged_inventory_csv():
+def writing_damaged_inventory_csv(print_output = True): #calling writing_damaged_inventory_csv() equates to print_output = True, #print_output = True paramater is here to control printing statement vs returning the damaged_inventory_list for a different method, three_query_damaged_items(damaged_items_list) 
+   
     damaged_inventory_list = []
     with open ('csv_outputs/DamagedInventory.csv', 'w', newline='') as damaged_inventory_csv:
         write_csv_damaged_inventory = csv.writer(damaged_inventory_csv)
@@ -63,8 +64,10 @@ def writing_damaged_inventory_csv():
         damaged_inventory_list.sort(key=lambda x: int(x[3]), reverse=True) #most expensive to least expensive
         write_csv_damaged_inventory.writerows(i[:-1] for i in damaged_inventory_list )
     
-    print("DamagedInventory.csv written successfully!")
-    return damaged_inventory_list
+    if print_output == True:
+        print("DamagedInventory.csv written successfully!")
+    else:
+        return damaged_inventory_list
 
 
 
@@ -155,7 +158,7 @@ def two_query_manu_itemType(user_input):
     
 
 def three_query_damaged_items(damaged_items_list):
-    
+    print('\nDamaged Items:\n')
     for i in damaged_items_list:
         print(i[0],i[1], i[2],i[3], i[4])
 
@@ -184,7 +187,7 @@ if __name__ == "__main__":
         "[4] Find items past its service date \n"
         "[5] Find the most and least expensive items\n\n"
         "[q] Quit Inventory Program \n\n"
-        "Menu Number:")
+        "Enter Menu Number:")
 
         
         while userinput == '2':
@@ -201,7 +204,7 @@ if __name__ == "__main__":
         
         if userinput == '3':
 
-            damaged_items = writing_damaged_inventory_csv() #returns the damaged_inventory_list returned in the method, writing_damaged_inventory_csv() 
+            damaged_items = writing_damaged_inventory_csv(print_output = False) #returns the damaged_inventory_list returned in the method, writing_damaged_inventory_csv() 
             three_query_damaged_items(damaged_items)
 
         
