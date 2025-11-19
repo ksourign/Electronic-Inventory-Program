@@ -73,12 +73,21 @@ def writing_damaged_inventory_csv(print_output = True): #calling writing_damaged
 
 #PART 2########################################################################################################################
 
+    
+
+
+    
 def clean_user_input(user_input):
 # Returns clean user input (ex: [[manufacturer,item_type]])
     user_input = [user_input.split()] #splitting str userinput into an array (ex: user_input = "apple phone") --> (ex: [['apple','phone']])
 
     #checking if user inputs a manufacturer and an item_type
-    manufacturer_list = {i[1].lower() for i in full_inventory_list} #created a set to remove duplicate manufacturers
+    # print(user_input)
+    manufacturer_list = return_manufacturers(print_output = False)
+
+
+
+    # manufacturer_list = {i[1].lower() for i in full_inventory_list} #created a set to remove duplicate manufacturers
     item_type_list = {i[2] for i in full_inventory_list}
 
 
@@ -139,28 +148,48 @@ def clean_user_input(user_input):
     else: #for when len(user_input) = 0 or (ex: after cleaning process: [['x', 'z']] -> [[]])
         print(f"No such item in inventory {user_input}")
         return False
+
+
+#return manufacturer set
+def return_manufacturers(print_output = True):
+    manufacturer_set = set() #using a set bc we want to remove duplicate manufacturers. 
+
+    for i in full_inventory_list:
+        manufacturer_set.add(i[1].lower()) #Bc it's a set, duplicates will be checked before added into the set
     
+    if print_output == True:
+        print('Manufacturers In Inventory:')
+        for i in manufacturer_set:
+            print(i.capitalize())
+    else:
+        return manufacturer_set
+
+
+
+#[1]find items in inventory given manufacturer
+def one_query_manufacturer(user_input):
+    for i in full_inventory_list:
+        if i[1].lower() == user_input:
+            print(i[0],i[1], i[2], i[3],i[4])
 
 
         
-        
+#[2]find item in inventory given manufacturer + item_type
 def two_query_manu_itemType(user_input):
-
-# start finding item in inventory
-
-    print("\nYour Item is:")
-
-    
     for i in full_inventory_list: #[[],[],[]]
         if user_input[0][0] == i[1].lower() and user_input[0][1] == i[2]: #if user's manufacturer,j[0], is equal to i[1](manufacturer position) AND i[2](item_type)
             print(i[0], i[1], i[2], i[3]) #print the item_id, manufacturer, item_type, price
     
     
-
+#[3]find damaged items in inventory
 def three_query_damaged_items(damaged_items_list):
     print('\nDamaged Items:\n')
     for i in damaged_items_list:
         print(i[0],i[1], i[2],i[3], i[4])
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -177,36 +206,67 @@ if __name__ == "__main__":
     # Part 2 (Interactive Inventory Query Capability)
     
     print('\nInventory Program')
+    
     # userinput = input("Enter manufacturer and item type [ex: 'apple phone']: ") #ex: userinput = 'apple phone'
     userinput = ""
-    while userinput != 'q':
-        userinput = input("\nEnter a Number from the Menu Below: \n"
-        "[1] Find items given manufacturer [ex: 'apple'] \n"
-        "[2] Find items given manufacturer and item type [ex: 'apple phone']: \n"
-        "[3] Find damaged items\n"
-        "[4] Find items past its service date \n"
-        "[5] Find the most and least expensive items\n\n"
-        "[q] Quit Inventory Program \n\n"
-        "Enter Menu Number:")
+    
+    
 
-        
+    while userinput != 'q':
+        # if type(userinput) == str and len(userinput) != 0:
+        #     print("Enter a Valid Menu Number (1-5)")
+        #     userinput = ""
+        # else:
+        userinput = input("\nInventory Query Menu: \n"
+        "[1] Find Items Given Manufacturer [Ex: 'apple'] \n"
+        "[2] Find Items Given Manufacturer and Item Type [ex: 'apple phone']\n"
+        "[3] Find Damaged Items\n"
+        "[4] Find Items Past its Service Date \n"
+        "[5] Find the Most and Least Expensive Items\n\n"
+        "[q] Quit Inventory Program \n\n"
+        "Enter Menu Number (1-5):")
+
+        while userinput == '1':
+            return_manufacturers()
+            # print('Manufacturers in Inventory:\n', manufacturer_list)
+            # print("Find Items Given Manufacturer [Ex: 'apple']")
+            
+            # list avaialble manufacturers
+            userinput_for_task = input('\n[m] Back to Menu\n\nFind Items Given Manufacturer [Ex: "apple"]:')
+            if userinput_for_task != 'm':
+                one_query_manufacturer(userinput_for_task)
+                print()
+
+            if userinput_for_task == 'm':
+                userinput_for_task = ""
+                break
+
+
         while userinput == '2':
-            userinput_for_2 = input('\nPlease Enter Manufacturer and Item Type [ex: "apple phone"]\n[m] Back to Menu\n\n>')
+            userinput_for_task = input('\n[m] Back to Menu\n\nEnter Manufacturer and Item Type [ex: "apple phone"]:')
                         
-            if userinput_for_2 != 'm':
-                if clean_user_input(userinput_for_2) != False: #False would mean [[]] after removing items that are not manufacturer and item_type, True would mean [[manu,item_type]], also ensuring user is not exiting out of #2 task
-                    two_query_manu_itemType(clean_user_input(userinput_for_2)) #checking_inventory() only when item confirmed to be in inventory after clean_user_input()
-                    
-                    
-                
-            if userinput_for_2 == 'm':
+            if userinput_for_task != 'm':
+                # print(userinput_for_task)
+                # print(clean_user_input(userinput_for_task))
+                if clean_user_input(userinput_for_task) != False: #False would mean [[]] after removing items that are not manufacturer and item_type, True would mean [[manu,item_type]], also ensuring user is not exiting out of #2 task
+                    print()
+                    two_query_manu_itemType(clean_user_input(userinput_for_task)) #checking_inventory() only when item confirmed to be in inventory after clean_user_input()
+
+            if userinput_for_task == 'm':
+                userinput_for_task = ""
                 break
         
+
+
+
+
+
         if userinput == '3':
 
             damaged_items = writing_damaged_inventory_csv(print_output = False) #returns the damaged_inventory_list returned in the method, writing_damaged_inventory_csv() 
             three_query_damaged_items(damaged_items)
 
+        
         
         
 
