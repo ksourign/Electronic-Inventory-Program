@@ -1,6 +1,9 @@
 import csv
 from Asc_Date_Sort_ServiceDatesList_csv import service_date_sorted 
 from Desc_Sort_PriceList_csv import pricesorted 
+from datetime import datetime, date
+
+
 
 manufacturerList_sorted = []
 full_inventory_list = []
@@ -33,6 +36,14 @@ for i in manufacturerList_sorted:
                 i.insert (3, j[1]) #insert item_price,j[1], into pos 3 of manufactureList_sorted
                 i.insert(4, k[1]) #insert item_service_date into pos 2 of manufactureList_sorted
                 full_inventory_list.append(i) #append the new item record that includes [item_id,manufacturer, item_type, item_price,service_date,if_damaged]
+
+#sort date asc
+full_inventory_list.sort(key=lambda x:x[4])
+
+for i in full_inventory_list:
+    i[4]= datetime.strftime(i[4],"%m/%d/%Y")
+
+
 
 if (__name__ == "__main__"):
     print('full inventory list', full_inventory_list)
