@@ -1,6 +1,6 @@
 import csv
 from datetime import datetime, date
-from Asc_Date_Sort_ServiceDatesList_csv import service_date_sorted 
+from Asc_Date_Sort_ServiceDatesList_csv import PastServiceDate_array
 from Full_Inventory_Manu_asc import full_inventory_list
 
 #writing FullInventory.csv - writing all items in inventory ex: [item_id,manufacturer,item_type,price,service_date,if_damaged]
@@ -38,19 +38,27 @@ def writing_item_type_csv():
                 
 
 #writing PastServiceDateInventory.csv - writing all items where today's date is greater than an item's service date, ex: PastServiceDateInventory.csv [item_id,manufacturer,item_type,price,service_date,if_damaged]
-def writing_past_service_date_csv():
+def writing_past_service_date_csv(print_output = True):
+
+    
     print('\nPast Service Date List:')
     past_service_date_list = []
+
+    
+
     with open('csv_outputs/PastServiceDateInventory.csv', 'w', newline='') as past_service_date_csv: #creating PastServiceDateInventory csv file
         write_csv_past_service_date = csv.writer(past_service_date_csv)
-        for i in service_date_sorted:
-            if datetime.strptime(i[1], "%m/%d/%Y").date() < date.today():
-                for j in full_inventory_list:
-                    if j[0] == i[0]: #comparing item_id from service_date_sorted[] and full_inventory_list []
-                        past_service_date_list.append(j) #appending item record from full_inventory_list [] where today's date is item's service date
+        for i in PastServiceDate_array:
+            for j in full_inventory_list:
+                if i[0] == j[0]: #comparing item_id from service_date_sorted[] and full_inventory_list []
+                    past_service_date_list.append(j) #appending item record from full_inventory_list []
                         
         write_csv_past_service_date.writerows(past_service_date_list)
-    print("PastServiceDateInventory.csv written successfully!")
+    if print_output == True:
+        print("PastServiceDateInventory.csv written successfully!")
+
+    else:
+        return past_service_date_list
         
 
 
@@ -192,6 +200,10 @@ def three_query_damaged_items(damaged_items_list):
     for i in damaged_items_list:
         print(i[0],i[1], i[2],i[3], i[4])
 
+
+
+
+
 #[6]view full inventory
 def six_query_view_full_inventory():
     print("\nFull Inventory List:")
@@ -203,7 +215,17 @@ def six_query_view_full_inventory():
         print()
     
 
+def four_query_view_past_service_date():
+    
+    items_past_service_date = []
+    print("\nItems Past its Service Date:")
 
+    items_past_service_date = writing_past_service_date_csv(print_output = False)
+
+    for i in items_past_service_date:
+        for j in i:
+            print(j + " ", end="")
+        print()
 
 
 if __name__ == "__main__":
@@ -231,11 +253,11 @@ if __name__ == "__main__":
         #     userinput = ""
         # else:
         userinput = input("\nInventory Query Menu: \n"
-        "[1] Find Items Given Manufacturer [Ex: 'apple'] \n"
-        "[2] Find Items Given Manufacturer and Item Type [ex: 'apple phone']\n"
-        "[3] Find Damaged Items\n"
-        "[4] Find Items Past its Service Date \n"
-        "[5] Find the Most and Least Expensive Items\n"
+        "[1] View Items Given Manufacturer [Ex: 'apple'] \n"
+        "[2] View Items Given Manufacturer and Item Type [ex: 'apple phone']\n"
+        "[3] View Damaged Items\n"
+        "[4] View Items Past its Service Date \n"
+        "[5] View Most and Least Expensive Items\n"
         "[6] View Full Inventory\n\n"
         "[q] Quit Inventory Program \n\n"
         "Enter Menu Number (1-6):")
@@ -281,6 +303,9 @@ if __name__ == "__main__":
         elif userinput == '6':
             six_query_view_full_inventory()
         
+
+        elif userinput == '4':
+            four_query_view_past_service_date()
 
             # print(userinput) 
             # print(clean_user_input(userinput))
